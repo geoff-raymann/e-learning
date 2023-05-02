@@ -10,10 +10,16 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# add the MEDIA_URL to serve the uploaded media files and MEDIA_ROOT
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 
 # Quick-start development settings - unsuitable for production
@@ -38,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'students.apps.StudentsConfig',
+    'embed_video',
 ]
 
 MIDDLEWARE = [
@@ -124,3 +132,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # LOGIN_REDIRECT_URL = 'course/mine/'
+
+#  Redirect the studen to course list when they login
+
+LOGIN_REDIRECR_URL = reverse_lazy('student_course_list')
