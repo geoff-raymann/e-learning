@@ -26,7 +26,7 @@ class OwnerEditMixin(object):
         form.instance.owner = self.request.user
         return super().form_valid(form)
     
-class OwnerCourseMixin(OwnerMixin, LoginRequiredMixin, PermissionRequiredMixin):
+class OwnerCourseMixin(OwnerMixin, OwnerEditMixin, LoginRequiredMixin, PermissionRequiredMixin):
     model = Course
     fields = ['subject', 'title', 'slug', 'overview']
     success_url = reverse_lazy('manage_course_list')
@@ -38,7 +38,15 @@ class ManageCourseListView(OwnerCourseMixin, ListView):
     template_name = 'courses/manage/course/list.html'
     permission_required = 'courses.view_course'
 
-class CourseCreateView(OwnerCourseEditMixin, CreateView):
+class CourseCreateView(OwnerCourseEditMixin, OwnerEditMixin, CreateView):
+    model = Course
+    fields = ['subject', 'title', 'slug', 'overview']
+    template_name = 'courses/manage/course/form.html'
+    success_url = reverse_lazy('manage_course_list')
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
     permission_required = 'courses.add_course'
 
 class CourseUpdateView(OwnerCourseEditMixin, UpdateView):
@@ -191,3 +199,5 @@ class CourseDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['enroll_form'] = CourseEnrollForm(initial={'course': self.object})
         return context
+    
+

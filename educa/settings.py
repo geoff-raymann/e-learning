@@ -134,7 +134,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# LOGIN_REDIRECT_URL = 'course/mine/'
+LOGIN_REDIRECT_URL = '/course/mine/'
 
 #  Redirect the studen to course list when they login
 
@@ -151,4 +151,16 @@ REST_FRAMEWORK = {
 
 #  Using ASGI routing application for channels
 
+# ASGI_APPLICATION = "NAME_OF_FOLDER_WHERE_ASGI.PY_FILE_IS_LOCATED.asgi.application"
 ASGI_APPLICATION = 'educa.routing.application'
+
+# Seeting up Channels Redis
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)],
+        },
+    },
+}
